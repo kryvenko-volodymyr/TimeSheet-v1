@@ -1,0 +1,160 @@
+<?xml version="1.0"?>
+
+<mbeans-descriptors>
+
+    <mbean         name="LdapJdbcRealm"
+                   description="Implementation of Realm that authenticates through LDAP and authorizes through JBDC"
+                   domain="Catalina"
+                   group="Realm"
+                   type="org.apache.catalina.realm.LdapJdbcRealm">
+
+        <attribute   name="allRolesMode"
+                     description="The all roles mode."
+                     type="java.lang.String"/>
+
+        <attribute   name="className"
+                     description="Fully qualified class name of the managed object"
+                     type="java.lang.String"
+                     writeable="false"/>
+
+        <attribute   name="connectionURL"
+                     description="The connection URL for the server we will contact"
+                     type="java.lang.String"/>
+
+        <attribute   name="alternateURL"
+                     description="The Alternate URL"
+                     type="java.lang.String"/>
+
+        <attribute   name="connectionName"
+                     description="The connection username for the server we will contact"
+                     type="java.lang.String"/>
+
+        <attribute   name="connectionPassword"
+                     description="The connection password for the server we will contact"
+                     type="java.lang.String"/>
+
+        <attribute   name="userBase"
+                     description="The base element for user searches"
+                     type="java.lang.String"/>
+
+        <attribute   name="userSearch"
+                     description="The message format used to search for a user"
+                     type="java.lang.String"/>
+
+        <attribute   name="userSubtree"
+                     description="Should we search the entire subtree for matching users?"
+                     type="boolean"/>
+
+        <attribute   name="driverName"
+                     description="The JDBC driver to use"
+                     type="java.lang.String"/>
+
+        <attribute   name="dbConnectionURL"
+                     description="The connection URL to use when trying to connect to the database"
+                     type="java.lang.String"/>
+
+        <attribute   name="dbConnectionName"
+                     description="The connection username to use when trying to connect to the database"
+                     type="java.lang.String"/>
+
+        <attribute   name="dbConnectionPassword"
+                     description="The connection password to use when trying to connect to the database"
+                     type="java.lang.String"/>
+
+        <attribute   name="userTable"
+                     description="The DB table that holds user data"
+                     type="java.lang.String"/>
+
+        <attribute   name="userNameCol"
+                     description="The column in the user table that holds the user's username"
+                     type="java.lang.String"/>
+
+        <attribute   name="userRoleTable"
+                     description="The table that holds the relation between user's and roles"
+                     type="java.lang.String"/>
+
+        <attribute   name="roleNameCol"
+                     description="The column in the user role table that names a role"
+                     type="java.lang.String"/>
+
+
+        <attribute   name="adCompat"
+                     description=" The current settings for handling PartialResultExceptions"
+                     type="boolean"/>
+
+        <attribute   name="authentication"
+                     description="The type of authentication to use"
+                     type="java.lang.String"/>
+
+        <attribute   name="commonRole"
+                     description="The common role"
+                     type="java.lang.String"/>
+
+        <attribute   name="connectionTimeout"
+                     description="The connection timeout"
+                     type="java.lang.String"/>
+
+        <attribute   name="contextFactory"
+                     description="The JNDI context factory for this Realm"
+                     type="java.lang.String"/>
+
+        <attribute   name="digest"
+                     description="Digest algorithm used in storing passwords in a non-plaintext format"
+                     type="java.lang.String"/>
+
+        <attribute   name="digestEncoding"
+                     description="The digest encoding charset."
+                     type="java.lang.String"/>
+
+        <attribute   name="protocol"
+                     description="The protocol to be used"
+                     type="java.lang.String"/>
+
+        <attribute   name="realmPath"
+                     description="The realm path"
+                     type="java.lang.String"/>
+
+        <attribute   name="referrals"
+                     description="The current setting for handling JNDI referrals."
+                     type="java.lang.String"/>
+
+        <attribute   name="roleBase"
+                     description="The base element for role searches"
+                     type="java.lang.String"/>
+
+        <attribute   name="roleName"
+                     description="The name of the attribute containing roles held elsewhere"
+                     type="java.lang.String"/>
+
+        <attribute   name="roleNested"
+                     description="The 'The nested group search flag' flag"
+                     type="boolean"/>
+
+        <attribute   name="roleSearch"
+                     description="The message format used to select roles for a user"
+                     type="java.lang.String"/>
+
+        <attribute   name="roleSubtree"
+                     description="Should we search the entire subtree for matching memberships?"
+                     type="boolean"/>
+
+        <attribute   name="stateName"
+                     description="The name of the LifecycleState that this component is currently in"
+                     type="java.lang.String"
+                     writeable="false"/>
+
+        <attribute   name="userRoleName"
+                     description="The name of the attribute in the user's entry containing roles for that user"
+                     type="java.lang.String"/>
+
+        <attribute   name="validate"
+                     description="The 'validate certificate chains' flag."
+                     type="boolean"/>
+
+        <operation name="start" description="Start" impact="ACTION" returnType="void" />
+        <operation name="stop" description="Stop" impact="ACTION" returnType="void" />
+        <operation name="init" description="Init" impact="ACTION" returnType="void" />
+        <operation name="destroy" description="Destroy" impact="ACTION" returnType="void" />
+    </mbean>
+
+</mbeans-descriptors>
