@@ -121,7 +121,7 @@ public class LdapJdbcRealm extends JNDIRealm implements Realm {
                 sb.append(roleNameCol);
                 sb.append(" FROM ");
                 sb.append(userRoleTable);
-                sb.append(" where id = (select role_id from  role_by_employee " +
+                sb.append(" where id in (select role_id from  role_by_employee " +
                         " where employee_id = (select id from employee " +
                         " where ");
                 sb.append(userNameCol);
