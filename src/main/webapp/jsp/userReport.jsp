@@ -6,8 +6,8 @@
 <head>
     <title>TimeSheet</title>
     <link rel="stylesheet" type="text/css" href="css\userReport.css">
-    <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
-    <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    <script src="js\jquery-1.12.1.min.js"></script>
+    <script src="js\jquery-migrate-1.4.0.min.js"></script>
     <script src="js\JSONProcessor.js"></script>
     <script src="js\userReportProcessor.js"></script>
     <script>
