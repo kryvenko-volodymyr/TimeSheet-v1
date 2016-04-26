@@ -93,7 +93,7 @@ public class LdapJdbcRealm extends JNDIRealm implements Realm {
                     }
                 } catch (SQLException e) {
                     // Log the problem for posterity
-                    containerLog.error(sm.getString("jdbcRealm.exception"), e);
+                	LdapJdbcRealm.this.containerLog.error(sm.getString("jdbcRealm.exception"), e);
 
                     // Close the connection so that it gets reopened next time
                     if (dbConnection != null)
