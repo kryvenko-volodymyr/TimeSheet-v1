@@ -15,7 +15,7 @@
         var tempList;
 
         $(document).ready(function () {
-            $.getJSON("/user-report", JSONToUserReport)
+            $.getJSON("user-report", JSONToUserReport)
                     .done(function () {
                                 var options = {/*weekday: 'long', */year: 'numeric', month: 'long', day: 'numeric'};
                                 $("#user_report_timeframe").text(

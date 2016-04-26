@@ -95,14 +95,14 @@ function undoUnsavedChanges() {
 
     if (confirm(UNDOALL_CONFIRM_PROMT) == true) {
         $("#user_report_table").empty();
-        $.getJSON("/user-report", JSONToUserReport).done(populateUserReportTalbe());
+        $.getJSON("user-report", JSONToUserReport).done(populateUserReportTalbe());
     }
 }
 
 function postUserReport() {
     $.ajax({
         type: "POST",
-        url: "/user-report",
+        url: "user-report",
         data: {
             user_report: JSON.stringify(userReport)
         },
@@ -123,7 +123,7 @@ function postUserReport() {
 }
 
 function prepareAddingUserReportRow() {
-    $.getJSON("/work-types", JSONToList).done(function () {
+    $.getJSON("work-types", JSONToList).done(function () {
         $("#work_type_select").empty();
         $("#work_title_select").hide();
         $("#work_form_select").hide();
@@ -141,7 +141,7 @@ function prepareAddingUserReportRow() {
 function getWorkTitles() {
     var workTypeid = $("#work_type_select").val();
 
-    $.getJSON("/work-titles?work-type-id=" + workTypeid, JSONToList).done(function () {
+    $.getJSON("work-titles?work-type-id=" + workTypeid, JSONToList).done(function () {
         $("#work_type_select option[value='0']").remove();
         $("#work_title_select").empty();
         $("#work_title_select").show();
@@ -160,7 +160,7 @@ function getWorkTitles() {
 function getWorkForms() {
     var workTypeid = $("#work_type_select").val();
 
-    $.getJSON("/work-forms?work-type-id=" + workTypeid, JSONToList).done(function () {
+    $.getJSON("work-forms?work-type-id=" + workTypeid, JSONToList).done(function () {
         $("#work_title_select option[value='0']").remove();
         $("#work_form_select").empty();
         $("#work_form_select").show();
@@ -180,7 +180,7 @@ function getWorkInstanceDetails() {
     var workTitleId = $("#work_title_select").val();
     var workFormId = $("#work_form_select").val();
 
-    $.getJSON("/work-instances?work-title-id=" + workTitleId + "&work-form-id=" + workFormId, JSONToList).done(function () {
+    $.getJSON("work-instances?work-title-id=" + workTitleId + "&work-form-id=" + workFormId, JSONToList).done(function () {
         $("#work_instance_datalist").empty();
         $("#work_instance_details_input").show();
         $("#add_user_report_row_button").show();
@@ -263,7 +263,7 @@ function addUserReportRowWhereNOWi(workInstanceDetails) {
 
     $.ajax({
         type: "POST",
-        url: "/work-instances",
+        url: "work-instances",
         data: {
             work_title_id: $("#work_title_select").val(),
             work_form_id: $("#work_form_select").val(),
