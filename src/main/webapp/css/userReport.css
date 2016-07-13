@@ -6,8 +6,13 @@ body {
     margin: 0;
 }
 
-#user_report_timeframe {
+.dates_header {
     text-align: center;
+}
+
+#user_report_timeframe {
+    margin-left: 20px;
+    margin-right: 20px;
 }
 
 .user_report_row_head {
@@ -31,12 +36,28 @@ body {
     font-style: italic;
 }
 
+.report_record_weekday {
+    font-size: 0.75em;
+}
+
 .report_record_monthday {
+    text-align: center;
     width: 40px;
     font-weight: bold;
+    font-size: 1.5em;
+}
+
+.report_record_month {
+    text-align: center;
+    font-size: 0.75em;
 }
 
 .report_record_hours_num_input {
     width: 40px;
     text-align: center;
+}
+
+td.sunday {
+    color: red;
+    padding-right: 30px;
 }

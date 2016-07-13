@@ -17,23 +17,27 @@
         <script src="js\userReportProcessor.js"></script>
         <script>
             $(document).ready(function () {
-                $.getJSON("user-report", JSONToUserReport)
-                        .done(function () {
-                            var options = {
-                                /*weekday: 'long', */
-                                year: 'numeric',
-                                month: 'long',
-                                day: 'numeric'};
-                            $("#user_report_timeframe").text(
-                                    userReport.date_from.toLocaleDateString("uk-ua", options) + "  -  " +
-                                    userReport.date_to.toLocaleDateString("uk-ua", options));
-                            populateUserReportTalbe();
-                        }
-                        ).done(function () {
-                    prepareDataInput();
-                    prepareAddingUserReportRow();
-                });
+                showDefaultReport();
             });
+            
+//            $(document).ready(function () {
+//                $.getJSON("user-report", JSONToUserReport)
+//                        .done(function () {
+//                            var options = {
+//                                /*weekday: 'long', */
+//                                year: 'numeric',
+//                                month: 'long',
+//                                day: 'numeric'};
+//                            $("#user_report_timeframe").text(
+//                                    userReport.date_from.toLocaleDateString("uk-ua", options) + "  -  " +
+//                                    userReport.date_to.toLocaleDateString("uk-ua", options));
+//                            populateUserReportTalbe();
+//                        }
+//                        ).done(function () {
+//                    prepareDataInput();
+//                    prepareAddingUserReportRow();
+//                });
+//            });
 
             $(window).bind('beforeunload', function (e) {
                 if (reportModified) {
@@ -66,10 +70,14 @@
 
         <hr>
 
-        <h4 id="user_report_timeframe"></h4>
+        <h4 class = "dates_header">
+            <button type="button" id="go_backward" onclick="" disabled><<<</button>
+            <span id="user_report_timeframe"></span>
+            <button type="button" id="go_forward" onclick="" disabled>>>></button>
+        </h4>
 
         <button type="button" id="post_user_report" onclick="postUserReport()" disabled>Зберегти на сервері</button>
-<!--        <button type="button" id="undo_unposted_changes" onclick="undoUnsavedChanges()" disabled>Скасувати щойно внесені зміни</button>-->
+        <!--        <button type="button" id="undo_unposted_changes" onclick="undoUnsavedChanges()" disabled>Скасувати щойно внесені зміни</button>-->
 
         <hr>
 

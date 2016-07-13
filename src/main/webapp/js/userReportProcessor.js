@@ -2,13 +2,38 @@ var ROW_ALREADY_EXISTS_ERROR = "Такий рядок вже є у вашому 
         "Дублювання рядків не дозволяється.\n" +
         "Будь-ласка, використовуйте інсуючий рядок.";
 var UNDOALL_CONFIRM_PROMT = "Скасувати усі зміни, що не були збережені на сервері?";
-var REPORT_POST_SUCESS = "Звіт було успішно збережено на сервері";
+var REPORT_POST_SUCESS = "OK\n" +
+        "Звіт було успішно збережено на сервері.\n" +
+        "Можна безпечно закривати сторінку";
 var REPORT_POST_500 = "При збереженні звіту сталася помилка сервера.\n" +
         "Звіт не було збережено.\n" +
         "Будь ласка, не закривайте вікно та зверніться до адміністратора системи.";
 var REPORT_POST_403 = "Доступ до сервера заборонено.\n" +
         "Звіт не було збережено.\n" +
         "Будь ласка, не закривайте вікно та зверніться до адміністратора системи.";
+
+//when the page is first loaded
+function showDefaultReport() {
+    $.getJSON("user-report", JSONToUserReport)
+            .done(function () {
+                populateReportTimeFrame();
+                populateUserReportTalbe();
+                prepareAddingUserReportRow();
+            }).done(function () {
+        prepareDataInput();
+    });
+}
+
+function populateReportTimeFrame() {
+    var options = {
+        /*weekday: 'long', */
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'};
+    $("#user_report_timeframe").text(
+            userReport.date_from.toLocaleDateString("uk-ua", options) + "  -  " +
+            userReport.date_to.toLocaleDateString("uk-ua", options));
+}
 
 function populateUserReportTalbe() {
     var userReportRecordsLine;
@@ -23,9 +48,12 @@ function populateUserReportTalbe() {
         var optionsLine1 = {weekday: 'short'};
         var optionsLine2 = {day: 'numeric'};
         var optionsLine3 = {month: 'short'};
+        
+        var isSunday = (columnDate.getDay() == 0);
 
         $("#user_report_table_dates").append("<td id ='" +
-                "user_report_table_dates_" + columnDate.getTime() + "'>" +
+                "user_report_table_dates_" + columnDate.getTime() + "'" +
+                (isSunday ? " class = 'sunday'" : "") + ">" +
                 "<p class='report_record_weekday'>" +
                 columnDate.toLocaleDateString("uk-ua", optionsLine1) +
                 "</p><p class='report_record_monthday'>" +
@@ -94,7 +122,7 @@ function prepareDataInput() {
         } else {
             userReport[wi][rr].hours_num = hoursNum;
         }
-        
+
         $("#post_user_report").removeAttr('disabled');
         reportModified = true;
     });
@@ -247,7 +275,7 @@ function addUserReportRowIfWI(workInstance) {
                 "<input " +
                 "type = number class = 'report_record_hours_num_input' " +
                 "id = 'input_wi" + workInstance.id + "_rr" + columnDate.getTime() + "' " +
-                "value='" + 0 + "' " +
+                "value='" + "" + "' " +
                 "min='0' max='24'" +
                 ">" +
                 "</td>");
@@ -285,3 +313,4 @@ function addUserReportRowWhereNOWi(workInstanceDetails) {
         dataType: "json"
     });
 }
+
