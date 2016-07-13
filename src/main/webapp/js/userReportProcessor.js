@@ -1,54 +1,61 @@
 var ROW_ALREADY_EXISTS_ERROR = "Такий рядок вже є у вашому звіті.\n\n" +
-    "Дублювання рядків не дозволяється.\n" +
-    "Будь-ласка, використовуйте інсуючий рядок.";
+        "Дублювання рядків не дозволяється.\n" +
+        "Будь-ласка, використовуйте інсуючий рядок.";
 var UNDOALL_CONFIRM_PROMT = "Скасувати усі зміни, що не були збережені на сервері?";
 var REPORT_POST_SUCESS = "Звіт було успішно збережено на сервері";
 var REPORT_POST_500 = "При збереженні звіту сталася помилка сервера.\n" +
-    "Звіт не було збережено.\n" +
-    "Будь ласка, не закривайте вікно та зверніться до адміністратора системи.";
+        "Звіт не було збережено.\n" +
+        "Будь ласка, не закривайте вікно та зверніться до адміністратора системи.";
 var REPORT_POST_403 = "Доступ до сервера заборонено.\n" +
-    "Звіт не було збережено.\n" +
-    "Будь ласка, не закривайте вікно та зверніться до адміністратора системи.";
+        "Звіт не було збережено.\n" +
+        "Будь ласка, не закривайте вікно та зверніться до адміністратора системи.";
 
 function populateUserReportTalbe() {
     var userReportRecordsLine;
 
+    //create dates row
     $("#user_report_table").append("<tr id = 'user_report_table_dates'><td id = 'dates_empty_cell'></td></tr>");
+
+    //fill-in the dates row with the dates from the userReport object
     for (columnDate = new Date(userReport.date_from);
-         columnDate <= userReport.date_to;
-         columnDate.setDate(columnDate.getDate() + 1)) {
+            columnDate <= userReport.date_to;
+            columnDate.setDate(columnDate.getDate() + 1)) {
         var optionsLine1 = {weekday: 'short'};
         var optionsLine2 = {day: 'numeric'};
         var optionsLine3 = {month: 'short'};
 
         $("#user_report_table_dates").append("<td id ='" +
-            "user_report_table_dates_" + columnDate.getTime() + "'>" +
-            "<p class='report_record_weekday'>" +
-            columnDate.toLocaleDateString("uk-ua", optionsLine1) +
-            "</p><p class='report_record_monthday'>" +
-            columnDate.toLocaleDateString("uk-ua", optionsLine2) +
-            "</p><p class='report_record_month'>" +
-            columnDate.toLocaleDateString("uk-ua", optionsLine3) +
-            "</p></td>");
+                "user_report_table_dates_" + columnDate.getTime() + "'>" +
+                "<p class='report_record_weekday'>" +
+                columnDate.toLocaleDateString("uk-ua", optionsLine1) +
+                "</p><p class='report_record_monthday'>" +
+                columnDate.toLocaleDateString("uk-ua", optionsLine2) +
+                "</p><p class='report_record_month'>" +
+                columnDate.toLocaleDateString("uk-ua", optionsLine3) +
+                "</p></td>");
     }
 
+    //create a new row if there is another one work instance in the userReport
     $.each(userReport, function (wi_key, userReportRow) {
         if (wi_key != "date_from" && wi_key != "date_to") {
-            userReportRecordsLine = new Array();
+            userReportRecordsLine = new Array(); //array to populate from
+
+            //indicate the work instance details
             $("#user_report_table").append("<tr id = '" + wi_key + "'>" +
-                "<td class = 'user_report_row_head'>" +
-                "<br>" +
-                /*"<p class='work_type_title'>" +
-                userReportRow.work_instance.work_type_title +*/
-                "</p><p class='work_title_title'>" +
-                userReportRow.work_instance.work_title_title +
-                "</p><p class='work_form_title'>" +
-                userReportRow.work_instance.work_form_title +
-                "</p><p class='work_instance_details'>" +
-                userReportRow.work_instance.details +
-                "</p></td></tr>")
+                    "<td class = 'user_report_row_head'>" +
+                    "<br>" +
+                    /*"<p class='work_type_title'>" +
+                     userReportRow.work_instance.work_type_title +*/
+                    "</p><p class='work_title_title'>" +
+                    userReportRow.work_instance.work_title_title +
+                    "</p><p class='work_form_title'>" +
+                    userReportRow.work_instance.work_form_title +
+                    "</p><p class='work_instance_details'>" +
+                    userReportRow.work_instance.details +
+                    "</p></td></tr>");
         }
 
+        //fill the userReportRecordsLine with the report records for currend work instance
         $.each(userReportRow, function (rr_key, reportRecord) {
             if (rr_key != "work_instance") {
                 userReportRecordsLine.push(reportRecord);
@@ -61,33 +68,35 @@ function populateUserReportTalbe() {
             });
         }
 
+        //add report records cells to current line
         $.each(userReportRecordsLine, function (indexArray, reportRecord) {
             $("#" + wi_key).append(
-                "<td id ='" + wi_key + "_rr" + reportRecord.date_reported.getTime() + "'>" +
-                "<input " +
-                "type = number class = 'report_record_hours_num_input' " +
-                "id = 'input_" + wi_key + "_rr" + reportRecord.date_reported.getTime() + "' " +
-                "value='" + reportRecord.hours_num + "' " +
-                "min='0' max='24'" +
-                ">" +
-                "</td>")
-        })
+                    "<td id ='" + wi_key + "_rr" + reportRecord.date_reported.getTime() + "'>" +
+                    "<input " +
+                    "type = number class = 'report_record_hours_num_input' " +
+                    "id = 'input_" + wi_key + "_rr" + reportRecord.date_reported.getTime() + "' " +
+                    "value='" + (reportRecord.hours_num == 0 ? "" : reportRecord.hours_num) + "' " +
+                    "min='0' max='24'" +
+                    ">" +
+                    "</td>");
+        });
     });
 }
 
 function prepareDataInput() {
-    $("#user_report_table").on("focusout", ".report_record_hours_num_input", function () {
+    $("#user_report_table").on("focusout click", ".report_record_hours_num_input", function () {
         var wi = (this.id).slice(6, -16);
         var rr = (this.id).slice(-15);
         var hoursNum = parseInt(this.value, 10);
-        if (isNaN(hoursNum)) {
+        if (isNaN(hoursNum) || hoursNum == 0) {
             userReport[wi][rr].hours_num = 0;
+            this.value = "";
         } else {
             userReport[wi][rr].hours_num = hoursNum;
         }
-    });
-    $("#user_report_table").on("click", function () {
+        
         $("#post_user_report").removeAttr('disabled');
+        reportModified = true;
     });
 }
 
@@ -110,6 +119,7 @@ function postUserReport() {
             200: function () {
                 alert(REPORT_POST_SUCESS);
                 $("#post_user_report").attr('disabled', 'disabled');
+                reportModified = false;
             },
             500: function () {
                 alert(REPORT_POST_500);
@@ -130,10 +140,10 @@ function prepareAddingUserReportRow() {
         $("#work_instance_details_input").hide();
         $("#add_user_report_row_button").hide();
         $("#work_type_select")
-            .append("<option value='0' disabled selected>Додати рядок</option>");
+                .append("<option value='0' disabled selected>Додати рядок</option>");
         $.each(tempList, function (indexInArray, value) {
             $("#work_type_select")
-                .append("<option value=\"" + value.id + "\">" + value.title + "</option>");
+                    .append("<option value=\"" + value.id + "\">" + value.title + "</option>");
         });
     })
 }
@@ -149,10 +159,10 @@ function getWorkTitles() {
         $("#work_instance_details_input").hide();
         $("#add_user_report_row_button").hide();
         $("#work_title_select")
-            .append("<option value='0' disabled selected>Оберіть назву</option>");
+                .append("<option value='0' disabled selected>Оберіть назву</option>");
         $.each(tempList, function (indexInArray, value) {
             $("#work_title_select")
-                .append("<option value=\"" + value.id + "\">" + value.title + "</option>");
+                    .append("<option value=\"" + value.id + "\">" + value.title + "</option>");
         });
     })
 }
@@ -167,10 +177,10 @@ function getWorkForms() {
         $("#work_instance_details_input").hide();
         $("#add_user_report_row_button").hide();
         $("#work_form_select")
-            .append("<option value='0' disabled selected>Оберіть вид роботи</option>");
+                .append("<option value='0' disabled selected>Оберіть вид роботи</option>");
         $.each(tempList, function (indexInArray, value) {
             $("#work_form_select")
-                .append("<option value=\"" + value.id + "\">" + value.title + "</option>");
+                    .append("<option value=\"" + value.id + "\">" + value.title + "</option>");
         });
     })
 }
@@ -187,7 +197,7 @@ function getWorkInstanceDetails() {
         $.each(tempList, function (indexInArray, value) {
             if (value.details != "") {
                 $("#work_instance_datalist")
-                    .prepend("<option value=\'" + value.details + "\' id=\'" + value.id + "\'>");
+                        .prepend("<option value=\'" + value.details + "\' id=\'" + value.id + "\'>");
             }
         });
     })
@@ -218,29 +228,29 @@ function addUserReportRowIfWI(workInstance) {
     }
 
     $("#user_report_table").append("<tr id = 'wi" + workInstance.id + "'>" +
-        "<td class = 'user_report_row_head'>" +
-        "<br>" +
-        "<p class='work_type_title'>" +
-        workInstance.work_type_title +
-        "</p><p class='work_title_title'>" +
-        workInstance.work_title_title +
-        "</p><p class='work_form_title'>" +
-        workInstance.work_form_title +
-        "</p><p class='work_instance_details'>" +
-        workInstance.details +
-        "</p></td></tr>");
+            "<td class = 'user_report_row_head'>" +
+            "<br>" +
+            "<p class='work_type_title'>" +
+            workInstance.work_type_title +
+            "</p><p class='work_title_title'>" +
+            workInstance.work_title_title +
+            "</p><p class='work_form_title'>" +
+            workInstance.work_form_title +
+            "</p><p class='work_instance_details'>" +
+            workInstance.details +
+            "</p></td></tr>");
     for (columnDate = new Date(userReport.date_from);
-         columnDate <= userReport.date_to;
-         columnDate.setDate(columnDate.getDate() + 1)) {
+            columnDate <= userReport.date_to;
+            columnDate.setDate(columnDate.getDate() + 1)) {
         $("#wi" + workInstance.id).append(
-            "<td id ='wi" + workInstance.id + "_rr" + columnDate.getTime() + "'>" +
-            "<input " +
-            "type = number class = 'report_record_hours_num_input' " +
-            "id = 'input_wi" + workInstance.id + "_rr" + columnDate.getTime() + "' " +
-            "value='" + 0 + "' " +
-            "min='0' max='24'" +
-            ">" +
-            "</td>");
+                "<td id ='wi" + workInstance.id + "_rr" + columnDate.getTime() + "'>" +
+                "<input " +
+                "type = number class = 'report_record_hours_num_input' " +
+                "id = 'input_wi" + workInstance.id + "_rr" + columnDate.getTime() + "' " +
+                "value='" + 0 + "' " +
+                "min='0' max='24'" +
+                ">" +
+                "</td>");
     }
     newRowToUserReporObj(workInstance);
 }
@@ -249,8 +259,8 @@ function newRowToUserReporObj(workInstance) {
     userReport["wi" + workInstance.id] = {};
     userReport["wi" + workInstance.id]["work_instance"] = workInstance;
     for (columnDate = new Date(userReport.date_from);
-         columnDate <= userReport.date_to;
-         columnDate.setDate(columnDate.getDate() + 1)) {
+            columnDate <= userReport.date_to;
+            columnDate.setDate(columnDate.getDate() + 1)) {
         userReport["wi" + workInstance.id]["rr" + columnDate.getTime()] = {
             date_reported: columnDate.getTime(),
             hours_num: 0,

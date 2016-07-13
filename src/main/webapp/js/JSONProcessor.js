@@ -8,6 +8,8 @@ function JSONToUserReport(json, testStatus) {
         return;
     }
     var JSONstr = JSON.stringify(json);
+    
+    //save to global variable userReport declared at <head> of userReport.jsp 
     userReport = JSON.parse(JSONstr, dateReviver);
 }
 
