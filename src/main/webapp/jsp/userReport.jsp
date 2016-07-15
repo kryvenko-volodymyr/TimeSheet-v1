@@ -17,31 +17,12 @@
         <script src="js\userReportProcessor.js"></script>
         <script>
             $(document).ready(function () {
-                showDefaultReport();
+                pupulateDefaultReport();
             });
             
-//            $(document).ready(function () {
-//                $.getJSON("user-report", JSONToUserReport)
-//                        .done(function () {
-//                            var options = {
-//                                /*weekday: 'long', */
-//                                year: 'numeric',
-//                                month: 'long',
-//                                day: 'numeric'};
-//                            $("#user_report_timeframe").text(
-//                                    userReport.date_from.toLocaleDateString("uk-ua", options) + "  -  " +
-//                                    userReport.date_to.toLocaleDateString("uk-ua", options));
-//                            populateUserReportTalbe();
-//                        }
-//                        ).done(function () {
-//                    prepareDataInput();
-//                    prepareAddingUserReportRow();
-//                });
-//            });
-
             $(window).bind('beforeunload', function (e) {
                 if (reportModified) {
-                    var message = "Ви не зберегли дані звіту.";
+                    var message = "Ви не зберегли звіту за відображений період.";
                     e.returnValue = message;
                     return message; //in Chrome this will display the default dialog
                 }
@@ -71,9 +52,9 @@
         <hr>
 
         <h4 class = "dates_header">
-            <button type="button" id="go_backward" onclick="" disabled><<<</button>
+            <button type="button" id="go_backward" class="date_shift_button" onclick="populateReportFromDate('go_backward')"> < </button>
             <span id="user_report_timeframe"></span>
-            <button type="button" id="go_forward" onclick="" disabled>>>></button>
+            <button type="button" id="go_forward" class="date_shift_button" onclick="populateReportFromDate('go_forward')"> > </button>
         </h4>
 
         <button type="button" id="post_user_report" onclick="postUserReport()" disabled>Зберегти на сервері</button>

@@ -4,24 +4,52 @@ var ROW_ALREADY_EXISTS_ERROR = "Такий рядок вже є у вашому 
 var UNDOALL_CONFIRM_PROMT = "Скасувати усі зміни, що не були збережені на сервері?";
 var REPORT_POST_SUCESS = "OK\n" +
         "Звіт було успішно збережено на сервері.\n" +
-        "Можна безпечно закривати сторінку";
+        "Можна безпечно закривати сторінку.";
 var REPORT_POST_500 = "При збереженні звіту сталася помилка сервера.\n" +
         "Звіт не було збережено.\n" +
         "Будь ласка, не закривайте вікно та зверніться до адміністратора системи.";
 var REPORT_POST_403 = "Доступ до сервера заборонено.\n" +
         "Звіт не було збережено.\n" +
         "Будь ласка, не закривайте вікно та зверніться до адміністратора системи.";
+var SAVE_CURRENT_PERIOD_PROMPT = "Зберегти звіт за відображений період?";
 
 //when the page is first loaded
-function showDefaultReport() {
-    $.getJSON("user-report", JSONToUserReport)
-            .done(function () {
-                populateReportTimeFrame();
-                populateUserReportTalbe();
-                prepareAddingUserReportRow();
-            }).done(function () {
+function pupulateDefaultReport() {
+    $.getJSON("user-report", JSONToUserReport).done(function () {
+        populateReportTimeFrame();
+        populateUserReportTalbe();
+        prepareAddingUserReportRow();
+    }).done(function () {
         prepareDataInput();
     });
+}
+
+function populateReportFromDate(direction) {
+    if (reportModified) {
+        var saveReport = confirm(SAVE_CURRENT_PERIOD_PROMPT);
+        if (saveReport) {
+            postUserReport();
+            reportModified = false;
+            return;
+        }
+    }
+    $("#date_shift_button").attr('disabled', 'disabled');
+    var dateToStartFrom = userReport.date_from;
+    if (direction == "go_backward") {
+        dateToStartFrom.setDate(dateToStartFrom.getDate() - 14);
+    } else if (direction == "go_forward") {
+        dateToStartFrom.setDate(dateToStartFrom.getDate() + 14);
+    }
+    $.getJSON("user-report",
+            {dateToStartFrom: dateToStartFrom.toISOString()},
+            JSONToUserReport)
+            .done(function () {
+                populateReportTimeFrame();
+                
+                populateUserReportTalbe();
+
+                $("#date_shift_button").removeAttr('disabled');
+            });
 }
 
 function populateReportTimeFrame() {
@@ -38,17 +66,19 @@ function populateReportTimeFrame() {
 function populateUserReportTalbe() {
     var userReportRecordsLine;
 
+    //clean the table element
+    $("#user_report_table").text("");
     //create dates row
     $("#user_report_table").append("<tr id = 'user_report_table_dates'><td id = 'dates_empty_cell'></td></tr>");
 
-    //fill-in the dates row with the dates from the userReport object
+    //fill the dates row with the dates from the userReport object
     for (columnDate = new Date(userReport.date_from);
             columnDate <= userReport.date_to;
             columnDate.setDate(columnDate.getDate() + 1)) {
         var optionsLine1 = {weekday: 'short'};
         var optionsLine2 = {day: 'numeric'};
         var optionsLine3 = {month: 'short'};
-        
+
         var isSunday = (columnDate.getDay() == 0);
 
         $("#user_report_table_dates").append("<td id ='" +

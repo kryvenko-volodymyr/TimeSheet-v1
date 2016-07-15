@@ -14,6 +14,8 @@ public interface ReportsExchangeService {
     public UserReport getUserReport(Employee employee);
 
     public UserReport getUserReport(Employee employee, int daysReported);
+    
+    public UserReport getUserReport(Employee employee, Date dateFrom);
 
     public UserReport getUserReport(Employee employee, Date dateFrom, Date dateTo);
 

@@ -38,9 +38,20 @@ public class RprtsExchSrvImpl implements ReportsExchangeService {
     }
 
     @Override
+    public UserReport getUserReport(Employee employee, Date dateFrom) {
+        DatesProcessor datesProcessor = DatesProcessor.getInstance();
+        
+        Date dateTo = datesProcessor.increment(dateFrom, DEFAULT_NUM_DAYS_REPORTED);
+        
+        UserReport result = getUserReport(employee, dateFrom, dateTo);
+        
+        return result;
+    }
+
+    @Override
     public UserReport getUserReport(Employee employee, Date dateFrom, Date dateTo) {
 
-        ReportRecordDao reportRecordDao = (ReportRecordDao)servletContext.getAttribute("reportRecordDao");
+        ReportRecordDao reportRecordDao = (ReportRecordDao) servletContext.getAttribute("reportRecordDao");
         Set<ReportRecord> recordSet = reportRecordDao.getRecordSet(employee, dateFrom, dateTo);
 
         return new UserReport(dateFrom, dateTo, recordSet);
@@ -48,7 +59,7 @@ public class RprtsExchSrvImpl implements ReportsExchangeService {
 
     @Override
     public void saveReport(UserReport userReport, String employeeAccount) {
-        ReportRecordDao reportRecordDao = (ReportRecordDao)servletContext.getAttribute("reportRecordDao");
+        ReportRecordDao reportRecordDao = (ReportRecordDao) servletContext.getAttribute("reportRecordDao");
         Set<ReportRecord> reportRecordSet = userReport.getReportRecords();
         reportRecordDao.updateRecords(reportRecordSet, employeeAccount);
 
